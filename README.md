@@ -40,6 +40,14 @@ A thermistor divider: a fixed resistor and a thermistor network (the thermistor 
 
 Background: [Can you charge a lithium battery below freezing? Charge temperature limits](https://westlakesys.com/articles/charging-temperature-limits/)
 
+## Voltage divider calculator
+
+[`src/divider.ts`](src/divider.ts) · Interactive version: [https://westlakesys.com/tools/voltage-divider/](https://westlakesys.com/tools/voltage-divider/)
+
+Two resistors, R1 from the input to the pin and R2 to ground, either scaling an input down to a pin, Vpin = Vin · R2/(R1 + R2) − Ipin · (R1 ∥ R2), or setting the input level at which a pin reaches its reference (regulator feedback, enable thresholds), Level = Vpin · (1 + R1/R2) + Ipin · R1. It searches the E12 to E192 standard values for the pairs closest to a target within a factor of two of a wanted divider current. The worst case tries every corner of each resistor within ±(tolerance + TCR × the largest step from 25 °C), the pin current, and the pin reference; a root sum square adds the independent terms. For an ADC it gives the reading error referred to the input, every term at its worst at once; the sampling capacitor settling to ½ LSB after the largest step it may make, Vstep = max(Vpin, Vref − Vpin), in ln(Vstep / ½ LSB) · (R1 ∥ R2 + Rswitch) · Csample; and with a capacitor on the pin, the two-capacitor network over the sampling time (exact, from its eigenvalues) with the steady droop from repeated conversions.
+
+Background: [Why a lithium charger never finishes or stops early: thresholds and tolerances](https://westlakesys.com/articles/charge-thresholds-tolerances/)
+
 ## Using the code
 
 The files run as they are in any TypeScript setup, or directly in Node 22.6 or later (`node --experimental-strip-types`, on by default from Node 23.6). Each exports its input types, a set of example inputs, and the calculation functions.
