@@ -26,6 +26,20 @@ Background: [Why UWB range falls short of the datasheet](https://westlakesys.com
 
 Pierce oscillator, one capacitor from each crystal pin to ground. The crystal sees the two in series plus the stray capacitance: CL = C1·C2 / (C1 + C2) + Cstray, so with equal capacitors C = 2 × (CL − Cstray). With the optional crystal and oscillator data it also estimates the pulling and the oscillator gain margin.
 
+## PCB trace width calculator
+
+[`src/trace.ts`](src/trace.ts) · Interactive version: [https://westlakesys.com/tools/trace-width/](https://westlakesys.com/tools/trace-width/)
+
+The IPC-2221 trace heating formula, I = k · ΔT^0.44 · A^0.725 (A in square mils, k = 0.048 for outer layers and 0.024 for inner layers), solved for the width at a current, the current at a width, or the temperature rise for a given current and width. With an allowed voltage drop it finds the width or current that meets both limits, with the resistance taken at the trace temperature. It adds the DC resistance, voltage drop and power loss (copper at 1.724 µΩ·cm at 20 °C, 0.393 %/°C), and the current per via from the plated barrel cross-section. IPC-2221 is a starting point, not a guarantee; see the page for its limits.
+
+## NTC thermistor calculator
+
+[`src/ntc.ts`](src/ntc.ts) · Interactive version: [https://westlakesys.com/tools/ntc-thermistor/](https://westlakesys.com/tools/ntc-thermistor/)
+
+A thermistor divider: a fixed resistor and a thermistor network (the thermistor with an optional parallel and series resistor), with the thermistor either side of the pin. The thermistor follows the Beta equation, R = R25 · exp(B · (1/T − 1/298.15 K)), or a Steinhart-Hart fit, 1/T = A + B·ln R + C·(ln R)³, solved from three points of its table. Tolerances combine as (1 + δR) · R25 · (R/R25)^(1 + δB). For each threshold temperature it gives the pin voltage, the slope, and the lowest and highest temperature at which the threshold trips, found by trying every corner of the tolerances (R25, Beta, each resistor, the threshold, and the bias when it is not the reference). A threshold can also be a fixed comparator level (% of bias or volts). It suggests the fixed resistor that gives the less sensitive threshold the steepest slope, and solves the fixed and parallel (or series) resistors that put two fixed levels at two target temperatures.
+
+Background: [Can you charge a lithium battery below freezing? Charge temperature limits](https://westlakesys.com/articles/charging-temperature-limits/)
+
 ## Using the code
 
 The files run as they are in any TypeScript setup, or directly in Node 22.6 or later (`node --experimental-strip-types`, on by default from Node 23.6). Each exports its input types, a set of example inputs, and the calculation functions.
