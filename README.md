@@ -62,6 +62,14 @@ A small battery as its open-circuit voltage behind its internal resistance (time
 
 Background: [Why a BLE or UWB device resets on a coin cell](https://westlakesys.com/articles/coin-cell-pulse-loads/)
 
+## L-network matching calculator
+
+[`src/lmatch.ts`](src/lmatch.ts) · Interactive version: [https://westlakesys.com/tools/l-network-matching/](https://westlakesys.com/tools/l-network-matching/)
+
+Every lossless two-part L network (one series part, one shunt part) that conjugately matches a load ZL to a source Zs at one frequency, Zin = Zs*. With the shunt part beside the load: Y = 1/ZL = GL + jBL, b = ±√(GL/Rs − GL²) (real when Rs·GL ≤ 1), shunt susceptance B = b − BL, series reactance X = b·Rs/GL − Xs. With the shunt part beside the source, the same with the two ends swapped. At least one orientation exists for any positive resistances, so two or four solutions. The load can be entered as S11 against a reference (Z = Z0·(1 + Γ)/(1 − Γ)), or as the impedance a part should see (the network is then designed against its conjugate). Each part is rounded to the E12 or E24 values either side of it, keeping the combination with the best return loss at the frequency or the best worst case across a band. Return loss, mismatch loss, loss in the parts (each part's Q as a series resistance at the design frequency) and the bandwidth come from the exact ABCD response, with the load and source extended across frequency as a resistance with one series or parallel inductor or capacitor, or held fixed. Tolerances: each part at the bottom, middle and top of its range (the larger of an absolute and a percentage figure), nine combinations. Checked against Pozar (Example 5.1) and Bowick, and by brute force on 2000 random complex sources and loads, in [`validation/lmatch/`](validation/lmatch/).
+
+Background: [Why your antenna detunes in the enclosure, and how to retune it](https://westlakesys.com/articles/antenna-in-enclosure/)
+
 ## Using the code
 
 The files run as they are in any TypeScript setup, or directly in Node 22.6 or later (`node --experimental-strip-types`, on by default from Node 23.6). Each exports its input types, a set of example inputs, and the calculation functions.
