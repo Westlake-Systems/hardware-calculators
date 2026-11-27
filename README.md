@@ -48,6 +48,14 @@ Two resistors, R1 from the input to the pin and R2 to ground, either scaling an 
 
 Background: [Why a lithium charger never finishes or stops early: thresholds and tolerances](https://westlakesys.com/articles/charge-thresholds-tolerances/)
 
+## Coin cell pulse load calculator
+
+[`src/pulse.ts`](src/pulse.ts) · Interactive version: [https://westlakesys.com/tools/coin-cell-pulse/](https://westlakesys.com/tools/coin-cell-pulse/)
+
+A small battery as its open-circuit voltage behind its internal resistance (times a cold factor), plus an optional series resistor, feeding a node with a buffer capacitor (an ideal capacitance behind its ESR) beside the load. The load is a burst of constant-current steps. For each step the capacitor voltage relaxes exactly (computed as its drop below Voc, with expm1) toward Voc − R·I with τ = (R + ESR)·C, and the load sees (R·Vc + ESR·Voc − ESR·R·I)/(R + ESR); with no capacitor, Voc − R·I. Repeating bursts are solved as the fixed point of the affine map one cycle makes. It gives the lowest supply, the plain sizing C = Q/ΔV with ΔV = Voc − R·Isleep − floor − margin − Ipeak·ESR, the smallest capacitance at and above which the floor holds with the cell's help (a log scan from 1 nF to 100 F, then bisection, since the lowest voltage is not always monotonic in C), the peak cell current including the refill, inrush, the series resistor that holds the cell to a peak current, and the same checks at four states of one maker's 2032.
+
+Background: [Why a BLE or UWB device resets on a coin cell](https://westlakesys.com/articles/coin-cell-pulse-loads/)
+
 ## Using the code
 
 The files run as they are in any TypeScript setup, or directly in Node 22.6 or later (`node --experimental-strip-types`, on by default from Node 23.6). Each exports its input types, a set of example inputs, and the calculation functions.
