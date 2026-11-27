@@ -1,0 +1,28 @@
+{
+  "title": "Hardware calculators: the math behind the westlakesys.com electronics calculators",
+  "upload_type": "software",
+  "description": "Plain TypeScript, with test vectors, for everyday board-design calculations: battery life, radio range, crystal load capacitors, NTC thermistor dividers, PCB trace width, PCB impedance, voltage dividers, coin cell pulse loads, L-network matching and I2C pull-up resistors. Each calculator is interactive at https://westlakesys.com/tools/.",
+  "creators": [
+    {
+      "name": "Westlake Systems"
+    }
+  ],
+  "license": "mit",
+  "keywords": [
+    "hardware engineering",
+    "electronics",
+    "pcb design",
+    "calculator",
+    "rf",
+    "impedance",
+    "battery",
+    "typescript"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://westlakesys.com/tools/",
+      "relation": "isSupplementTo",
+      "resource_type": "other"
+    }
+  ]
+}
