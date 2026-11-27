@@ -70,6 +70,12 @@ Every lossless two-part L network (one series part, one shunt part) that conjuga
 
 Background: [Why your antenna detunes in the enclosure, and how to retune it](https://westlakesys.com/articles/antenna-in-enclosure/)
 
+## I2C pull-up resistor calculator
+
+[`src/i2c.ts`](src/i2c.ts) · Interactive version: [https://westlakesys.com/tools/i2c-pull-up/](https://westlakesys.com/tools/i2c-pull-up/)
+
+The limits on the pull-up resistance from the NXP I2C-bus specification (UM10204 Rev. 7.0, Tables 10 and 11 and Section 7), each at the worst end of the supply and resistor tolerances. Low end: the weakest driver sinking the pull-up current at its low level, Rp ≥ (VDD,max − VOL) / IOL − Rs (0.4 V at 3 mA in Standard-mode and Fast-mode, 20 mA in Fast-mode Plus; 0.2·VDD at 2 mA at 2 V and below; optionally 6 mA at 0.6 V or a datasheet figure), and with series resistors the low level held 0.1·VDD below VIL, VOL + Rs·I ≤ 0.2·VDD. A supply range that spans 2 V is checked on both sides of it; a driver whose rated VOL is already above 0.2·VDD is flagged. High end: the 30 % to 70 % rise time of an RC edge, 0.8473·Rp·Cb ≤ tr (1000, 300 or 120 ns), and the input leakage, Rp ≤ 0.1·VDD,min / ΣIi. Pull-ups already on the bus are combined in parallel. It lists standard values (E12, E24, E96) in the range, checks a value against every limit, and when the rise time cannot be met gives the clock the bus can still run at, fmax = 1 / (tLOW + tHIGH + tr + tf) (the specification's Equation 3). Checked against TI SLVA689A, the specification's worked figures, and by brute force, in [`validation/i2c/`](validation/i2c/).
+
 ## Using the code
 
 The files run as they are in any TypeScript setup, or directly in Node 22.6 or later (`node --experimental-strip-types`, on by default from Node 23.6). Each exports its input types, a set of example inputs, and the calculation functions.
